@@ -2,22 +2,16 @@
 // Sécurité : empêcher l'accès direct
 if (!defined('ABSPATH')) exit;
 
-add_filter('site_transient_update_themes', function ($transient) {
+add_filter('site_transient_update_plugins', function ($transient) {
     if (!is_object($transient)) $transient = new stdClass();
 
-    // Déterminer le thème actif en fonction des constantes
-    if (defined('OCADE_IS_CHILD_THEME') && OCADE_IS_CHILD_THEME) {
-        $theme = wp_get_theme()->parent();
-        $theme_slug = $theme->get_template();
-    } elseif (defined('OCADE_IS_THEME') && OCADE_IS_THEME) {
-        $theme = wp_get_theme();
-        $theme_slug = $theme->get_stylesheet();
-    } else {
-        $theme = wp_get_theme();
-        $theme_slug = $theme->get_stylesheet();
+    // Charger la fonction pour obtenir les infos du plugin
+    if (!function_exists('get_plugin_data')) {
+        require_once ABSPATH . 'wp-admin/includes/plugin.php';
     }
 
-    $current_version = $theme->get('Version');
+    $plugin_data = get_plugin_data(WP_PLUGIN_DIR . '/' . OCADE_PLUGIN_SLUG . '/' . OCADE_PLUGIN_SLUG . '.php');
+    $current_version = $plugin_data['Version'];
 
     // Récupérer la version distante (version.txt)
     $remote_version = get_transient(OCADE_REMOTE_VERSION);
@@ -25,9 +19,8 @@ add_filter('site_transient_update_themes', function ($transient) {
         $response = wp_remote_get(OCADE_VERSION_URL);
         if (is_wp_error($response)) return $transient;
 
-        // Nettoyer la version pour supprimer les espaces ou caractères invisibles
         $remote_version = trim(wp_remote_retrieve_body($response));
-        $remote_version = preg_replace('/[^0-9.]/', '', $remote_version); // Supprimer les caractères non numériques
+        $remote_version = preg_replace('/[^0-9.]/', '', $remote_version);
         set_transient(OCADE_REMOTE_VERSION, $remote_version, 6 * HOUR_IN_SECONDS);
     }
 
@@ -38,7 +31,7 @@ add_filter('site_transient_update_themes', function ($transient) {
         $transient->response[$theme_slug] = [
             'theme'       => $theme_slug,
             'new_version' => $remote_version,
-            'url'         => OCADE_THEME_REPO,
+            'url'         => OCADE_PLUGIN_REPO,
             'package'     => OCADE_ZIP_URL,
             'icons'       => [
                 'svg'  => OCADE_ICON_SVG_URL,    // URL vers une icône SVG

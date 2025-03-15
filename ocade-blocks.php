@@ -15,11 +15,12 @@ define("ORGANISATION_GITHUB", 'ocade-fusion-system'); // Nom de l'organisation G
 define("DEPOT_GITHUB", 'ocade-blocks'); // Nom du dépôt GitHub
 define('OCADE_IS_THEME', false); // True = Thème / False = Plugin
 define('OCADE_IS_CHILD_THEME', false); // Est le thème enfant ?
+define('OCADE_PLUGIN_SLUG', 'ocade-blocks'); // Slug du plugin
 
 // Partie dynamique
-define('OCADE_THEME_REPO', 'https://github.com/' . ORGANISATION_GITHUB . '/' . DEPOT_GITHUB);
-define('OCADE_VERSION_URL', OCADE_THEME_REPO . '/releases/latest/download/version.txt');
-define('OCADE_ZIP_URL', OCADE_THEME_REPO . '/releases/latest/download/'.DEPOT_GITHUB.'.zip');
+define('OCADE_PLUGIN_REPO', 'https://github.com/' . ORGANISATION_GITHUB . '/' . DEPOT_GITHUB);
+define('OCADE_VERSION_URL', OCADE_PLUGIN_REPO . '/releases/latest/download/version.txt');
+define('OCADE_ZIP_URL', OCADE_PLUGIN_REPO . '/releases/latest/download/'.DEPOT_GITHUB.'.zip');
 define('OCADE_REMOTE_VERSION', DEPOT_GITHUB . '_remote_version');
 define('OCADE_ICON_SVG_URL', 'https://raw.githubusercontent.com/' . ORGANISATION_GITHUB . '/' . DEPOT_GITHUB .'/master/assets/icons/icon.svg');
 define('OCADE_ICON_1X_URL',  'https://raw.githubusercontent.com/' . ORGANISATION_GITHUB . '/' . DEPOT_GITHUB .'/master/assets/icons/icon-1x.png');
