@@ -1,0 +1,26 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 2,
+	"name": "ocade-blocks/derniers-articles",
+	"version": "1.0.0",
+	"category": "widgets",
+  "keywords": ["ocade", "derniers", "articles", "latest", "posts"],
+	"textdomain": "ocade-blocks",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+  "supports": {
+    "anchor": true
+  },
+  "attributes": {
+    "preview": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "example": {
+    "attributes": {
+      "preview": true
+    }
+  }
+}

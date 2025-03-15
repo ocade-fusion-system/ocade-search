@@ -1,0 +1,14 @@
+{
+  "name": "ocade-blocks",
+  "version": "1.0.0",
+  "description": "Plugin de blocks Gutenberg",
+	"author": "Valentin Charrier",
+  "main": "build/index.js",
+	"scripts": {
+		"build": "wp-scripts build",
+		"start": "wp-scripts start"
+	},
+	"devDependencies": {
+		"@wordpress/scripts": "^27.1.0"
+	}
+}
