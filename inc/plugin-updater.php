@@ -2,6 +2,7 @@
 // Sécurité : empêcher l'accès direct
 if (!defined('ABSPATH')) exit;
 
+
 add_filter('site_transient_update_plugins', function ($transient) {
   if (!is_object($transient)) $transient = new stdClass();
 
@@ -15,12 +16,13 @@ add_filter('site_transient_update_plugins', function ($transient) {
 
   // Récupérer la version distante (version.txt)
   $remote_version = get_transient(OCADE_REMOTE_VERSION);
-  if (false === $remote_version) {
+  if (false === $remote_version or NULL == $remote_version) {
     $response = wp_remote_get(OCADE_VERSION_URL);
     if (is_wp_error($response)) return $transient;
 
     $remote_version = trim(wp_remote_retrieve_body($response));
     $remote_version = preg_replace('/[^0-9.]/', '', $remote_version);
+
     set_transient(OCADE_REMOTE_VERSION, $remote_version, 6 * HOUR_IN_SECONDS);
   }
 
@@ -28,8 +30,10 @@ add_filter('site_transient_update_plugins', function ($transient) {
   if (version_compare($remote_version, $current_version, '>')) {
     if (!isset($transient->response)) $transient->response = []; // Assurez-vous que c'est un tableau
 
-    $transient->response[$theme_slug] = [
-      'theme'       => $theme_slug,
+    $plugin_slug = plugin_basename(WP_PLUGIN_DIR . '/' . OCADE_PLUGIN_SLUG . '/' . OCADE_PLUGIN_SLUG . '.php');
+
+    $transient->response[$plugin_slug] = [
+      'plugin'       => $plugin_slug,
       'new_version' => $remote_version,
       'url'         => OCADE_PLUGIN_REPO,
       'package'     => OCADE_ZIP_URL,
