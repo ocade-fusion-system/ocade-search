@@ -11,5 +11,5 @@
 
 * Le branche du dépôt doit être `master` pas `main`.
 * Fichier `functions.php`
-* Fichier `style.css`
+* Fichier `ocade-blocks.php`
 * Fichier `.github/workflows/release.yml` changer `ocade-minimal` par le nom du dépot.
