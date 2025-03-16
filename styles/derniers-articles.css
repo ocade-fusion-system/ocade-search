@@ -59,17 +59,19 @@
 .wp-block-ocade-blocks-derniers-articles figure+div::after {
   content: "";
   position: absolute;
-  top: -1.5rem;
-  left: -1px;
-  width: calc(100% + 2px);
+  top: -1.3rem;
+  left: 0px;
+  width: calc(100% + 0px);
   height: 40px;
-  background-color: var(--wp--preset--color--orange);
+  background-color: white;
   mask-image: url(./forme-timbre.svg);
-  mask-size: 213px 40px;
+  mask-size: 216px 40px;
   mask-repeat: repeat;
+  mask-position: -10px;
 }
 
 .wp-block-ocade-blocks-derniers-articles header {
+  z-index: 0;
   padding: 0;
   background-color: inherit;
 }
