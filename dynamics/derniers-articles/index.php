@@ -5,7 +5,7 @@ function render_derniers_articles($attributes) {
   $wrapper_attributes = get_block_wrapper_attributes();
 
   // Récupération des X derniers articles
-  $nombre_articles = 6;
+  $nombre_articles = 10;
 
   $args = array(
     'post_type' => 'post',

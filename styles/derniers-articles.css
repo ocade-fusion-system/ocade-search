@@ -9,6 +9,7 @@
   gap: 1rem;
   align-items: stretch;
   justify-content: space-evenly;
+  flex-wrap: wrap;
   list-style-type: none;
   padding-left: 0;
 }
@@ -93,12 +94,6 @@
   flex-wrap: wrap;
   gap: 0.5rem;
   margin-top: 1rem;
-}
-
-@media (min-width: 460px) {
-  .wp-block-ocade-blocks-derniers-articles .news-tags {
-    justify-content: center;
-  }
 }
 
 .wp-block-ocade-blocks-derniers-articles .news-tags a {
