@@ -4,5 +4,79 @@ function render_derniers_articles($attributes) {
   extract($attributes);
   $wrapper_attributes = get_block_wrapper_attributes();
 
-  return '<div ' . $wrapper_attributes . '><h2>Derniers Articles</h2></div>';
+  // Récupération des X derniers articles
+  $nombre_articles = 6;
+
+  $args = array(
+    'post_type' => 'post',
+    'posts_per_page' => $nombre_articles,
+    'orderby' => 'date',
+    'order' => 'DESC',
+    'status' => 'publish'
+  );
+
+  $query = new WP_Query($args);
+
+  if (!$query->have_posts()) return '';
+
+  // Génération du rendu
+  ob_start();
+
+  $categoryPrincipal = get_the_category();
+  $categoryPrincipal = $categoryPrincipal[0]->name;
+?>
+
+  <ul <?= $wrapper_attributes; ?>>
+    <?php while (have_posts()) : the_post(); ?>
+      <li>
+        <article>
+          <figure>
+            <?= get_the_post_thumbnail(get_the_ID(), 'medium', ['alt' => esc_attr(get_post_meta(get_post_thumbnail_id(), '_wp_attachment_image_alt', true)), 'loading' => 'lazy']); ?>
+          </figure>
+          <div>
+            <header>
+              <span>
+                <a href="<?= esc_url(get_category_link(get_the_category()[0]->term_id)); ?>"
+                  aria-label="Catégorie : <?= esc_attr(get_the_category()[0]->name); ?>">
+                  <?= esc_html(get_the_category()[0]->name); ?>
+                </a>
+              </span>
+              <time datetime="<?= get_the_date('Y-m-d'); ?>">
+                <?= esc_html(get_the_date('d.m.Y')); ?>
+              </time>
+            </header>
+            <h3>
+              <a href="<?= esc_url(get_the_permalink()); ?>"
+                aria-label="Lire l’article : <?= esc_attr(get_the_title()); ?>">
+                <?= esc_html(get_the_title()); ?>
+              </a>
+            </h3>
+            <p><?= esc_html(get_the_excerpt()); ?></p>
+            <?php
+            $tags = get_the_tags();
+            if ($tags) : ?>
+              <div class="news-tags">
+                <?php foreach ($tags as $tag) : ?>
+                  <a href="<?= esc_url(get_tag_link($tag->term_id)); ?>" class="news-tag">
+                    #<?= esc_html($tag->name); ?>
+                  </a>
+                <?php endforeach; ?>
+              </div>
+            <?php endif; ?>
+            <footer>
+              <a href="<?= esc_url(get_the_permalink()); ?>"
+                aria-label="Lire la suite de l’article : <?= esc_attr(get_the_title()); ?>">
+                Lire la suite
+              </a>
+            </footer>
+          </div>
+        </article>
+      </li>
+    <?php endwhile; ?>
+  </ul>
+
+
+
+
+<?php return ob_get_clean();
 }
