@@ -15,6 +15,11 @@ function render_derniers_articles($attributes) {
     'status' => 'publish'
   );
 
+  if (is_category()) {
+    $category = get_queried_object();
+    if ($category) $args['category__in'] = array($category->term_id);
+  }
+
   $query = new WP_Query($args);
 
   if (!$query->have_posts()) return '';
