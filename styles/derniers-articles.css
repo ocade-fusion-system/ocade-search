@@ -88,9 +88,15 @@
 
 .wp-block-ocade-blocks-derniers-articles .news-tags {
   display: flex;
-  justify-content: center;
+  flex-wrap: wrap;
   gap: 0.5rem;
   margin-top: 1rem;
+}
+
+@media (min-width: 460px) {
+  .wp-block-ocade-blocks-derniers-articles .news-tags {
+    justify-content: center;
+  }
 }
 
 .wp-block-ocade-blocks-derniers-articles .news-tags a {
