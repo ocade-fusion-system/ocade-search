@@ -20,6 +20,11 @@ function render_derniers_articles($attributes) {
     if ($category) $args['category__in'] = array($category->term_id);
   }
 
+  if (is_tag()) {
+    $tag = get_queried_object();
+    if ($tag) $args['tag__in'] = array($tag->term_id);
+  }
+
   $query = new WP_Query($args);
 
   if (!$query->have_posts()) return '';
