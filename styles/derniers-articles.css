@@ -29,7 +29,7 @@
   margin-bottom: 0;
 }
 
-.wp-block-ocade-blocks-derniers-articles figure+div {
+.wp-block-ocade-blocks-derniers-articles .figure-link+div {
   position: relative;
   top: -2rem;
   max-width: 380px;
@@ -44,20 +44,20 @@
 }
 
 @media (min-width: 460px) {
-  .wp-block-ocade-blocks-derniers-articles figure+div {
+  .wp-block-ocade-blocks-derniers-articles .figure-link+div {
     margin-left: auto;
     margin-right: auto;
   }
 }
 
 @media (min-width: 1280px) {
-  .wp-block-ocade-blocks-derniers-articles figure+div {
+  .wp-block-ocade-blocks-derniers-articles .figure-link+div {
     margin-left: 2rem;
     margin-right: 2rem;
   }
 }
 
-.wp-block-ocade-blocks-derniers-articles figure+div::after {
+.wp-block-ocade-blocks-derniers-articles .figure-link+div::after {
   content: "";
   position: absolute;
   top: -1.3rem;
