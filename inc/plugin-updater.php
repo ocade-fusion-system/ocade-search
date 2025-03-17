@@ -24,7 +24,7 @@ add_filter('site_transient_update_plugins', function ($transient) {
     '5x'   => $icon_base_url . 'icon-5x.png',
   ];
 
-  // Charger la fonction pour obtenir les infos du plugin
+  // Charger la fonction pour obtenir les infos du plugin 
   if (!function_exists('get_plugin_data')) require_once ABSPATH . 'wp-admin/includes/plugin.php';
   if (!file_exists($plugin_file)) return $transient; // Sécurité : si le fichier du plugin n'existe pas
 
