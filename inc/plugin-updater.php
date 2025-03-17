@@ -29,7 +29,7 @@ add_filter('site_transient_update_plugins', function ($transient) {
   if (!file_exists($plugin_file)) return $transient; // Sécurité : si le fichier du plugin n'existe pas
 
   $plugin_data = get_plugin_data($plugin_file);
-  $current_version = $plugin_data['Version'];
+  $current_version = $plugin_data['Version']; 
 
   // Récupérer la version distante (mise en cache pour éviter les requêtes répétées)
   $remote_version = get_transient($plugin_slug . '_remote_version');
