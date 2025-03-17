@@ -94,6 +94,6 @@ add_filter('site_transient_update_plugins', function ($transient) {
 
 add_action('upgrader_process_complete', function ($upgrader_object, $options) {
   if ($options['action'] === 'update' && $options['type'] === 'plugin') {
-    delete_transient('ocade-blocks_remote_version'); // Supprime le cache de version après mise à jour
+    delete_transient('ocade-blocks_remote_version'); // Supprime le cache de version après mise à jour 
   }
 }, 10, 2);
