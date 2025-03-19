@@ -40,7 +40,7 @@ function render_derniers_articles($attributes) {
     <?php while (have_posts()) : the_post(); ?>
       <li>
         <article>
-          <a class="figure-link" href="<?= esc_url(get_the_permalink()); ?>" aria-label="Lire l’article : <?= esc_attr(get_the_title()); ?>" nofollow>
+          <a class="figure-link" href="<?= esc_url(get_the_permalink()); ?>" aria-label="Lire l’article : <?= esc_attr(get_the_title()); ?>" rel="nofollow">
             <figure>
               <?= get_the_post_thumbnail(get_the_ID(), 'medium', ['alt' => esc_attr(get_post_meta(get_post_thumbnail_id(), '_wp_attachment_image_alt', true)), 'loading' => 'lazy']); ?>
             </figure>
@@ -77,7 +77,7 @@ function render_derniers_articles($attributes) {
             <?php endif; ?>
             <footer>
               <a href="<?= esc_url(get_the_permalink()); ?>"
-                aria-label="Lire la suite de l’article : <?= esc_attr(get_the_title()); ?>" nofollow>
+                aria-label="Lire la suite de l’article : <?= esc_attr(get_the_title()); ?>" rel="nofollow">
                 Lire la suite
               </a>
             </footer>
