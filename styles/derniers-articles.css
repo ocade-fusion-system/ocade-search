@@ -31,6 +31,10 @@
   box-shadow: rgba(0, 0, 0, 0.15) 0px 1px 5px;
 }
 
+.wp-block-ocade-blocks-derniers-articles figure img {
+  height: auto;
+}
+
 .wp-block-ocade-blocks-derniers-articles .figure-link+div {
   position: relative;
   top: -2rem;
