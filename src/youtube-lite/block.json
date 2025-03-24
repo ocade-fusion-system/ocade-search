@@ -1,17 +1,18 @@
 {
-	"$schema": "https://schemas.wp.org/trunk/block.json",
-	"apiVersion": 2,
-	"name": "ocade-blocks/youtube-lite",
-	"version": "1.0.0",
-	"category": "widgets",
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 2,
+  "name": "ocade-blocks/youtube-lite",
+  "version": "1.0.0",
+  "category": "widgets",
   "keywords": ["ocade", "youtube", "lite", "iframe", "leger", "video"],
-	"textdomain": "ocade-blocks",
-	"editorScript": "file:./index.js",
-	"editorStyle": "file:./index.css",
-	"style": "file:./style-index.css",
+  "textdomain": "ocade-blocks",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
   "supports": {
     "anchor": true,
-    "align": ["wide", "full"]
+    "align": ["wide", "full"],
+    "defaultAlign": "wide"
   },
   "attributes": {
     "preview": {
@@ -20,6 +21,10 @@
     },
     "videoId": {
       "type": "string"
+    },
+    "customThumbnail": {
+      "type": "string",
+      "default": ""
     },
     "lazyLoad": {
       "type": "boolean",

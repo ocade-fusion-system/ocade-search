@@ -16,7 +16,12 @@
   "editorStyle": "file:./index.css",
   "style": "file:./style-index.css",
   "supports": {
-    "anchor": true
+    "anchor": true,
+    "align": [
+      "wide",
+      "full"
+    ],
+    "defaultAlign": "wide"
   },
   "attributes": {
     "preview": {

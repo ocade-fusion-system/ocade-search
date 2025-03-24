@@ -19,7 +19,8 @@
     "align": [
       "wide",
       "full"
-    ]
+    ],
+    "defaultAlign": "wide"
   },
   "attributes": {
     "preview": {

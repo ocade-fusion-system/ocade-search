@@ -21,7 +21,8 @@
     "align": [
       "wide",
       "full"
-    ]
+    ],
+    "defaultAlign": "wide"
   },
   "attributes": {
     "preview": {
@@ -30,6 +31,10 @@
     },
     "videoId": {
       "type": "string"
+    },
+    "customThumbnail": {
+      "type": "string",
+      "default": ""
     },
     "lazyLoad": {
       "type": "boolean",

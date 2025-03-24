@@ -8,7 +8,7 @@
   \*************************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":2,"name":"ocade-blocks/youtube-lite","version":"1.0.0","category":"widgets","keywords":["ocade","youtube","lite","iframe","leger","video"],"textdomain":"ocade-blocks","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","supports":{"anchor":true,"align":["wide","full"]},"attributes":{"preview":{"type":"boolean","default":false},"videoId":{"type":"string"},"lazyLoad":{"type":"boolean","default":false}},"example":{"attributes":{"preview":true}}}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":2,"name":"ocade-blocks/youtube-lite","version":"1.0.0","category":"widgets","keywords":["ocade","youtube","lite","iframe","leger","video"],"textdomain":"ocade-blocks","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","supports":{"anchor":true,"align":["wide","full"],"defaultAlign":"wide"},"attributes":{"preview":{"type":"boolean","default":false},"videoId":{"type":"string"},"customThumbnail":{"type":"string","default":""},"lazyLoad":{"type":"boolean","default":false}},"example":{"attributes":{"preview":true}}}');
 
 /***/ }),
 
@@ -31,7 +31,7 @@ function Block(props) {
   } = props;
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     ...blockProps
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Emplacement r\xE9serv\xE9 \xE0 la Vid\xE9o Youtube."));
+  });
 }
 
 /***/ }),
@@ -61,6 +61,7 @@ function Inspecteur({
 }) {
   const {
     videoId,
+    customThumbnail,
     lazyLoading
   } = attributes;
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.InspectorControls, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
@@ -72,15 +73,49 @@ function Inspecteur({
     onChange: value => setAttributes({
       videoId: value
     }),
-    help: "Exemple : URL est https://www.youtube.com/watch?v=dQw4w9WgXcQ alors ID est dQw4w9WgXcQ"
+    help: "https://www.youtube.com/watch?v=dQw4w9WgXcQ alors ID est dQw4w9WgXcQ"
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToggleControl, {
     label: "Chargement différé",
     checked: lazyLoading,
     onChange: value => setAttributes({
       lazyLoading: value
     }),
-    help: "Permet de charger la vidéo uniquement lorsqu'elle est visible à l'écran"
-  })));
+    help: "Activez si la vidéo est hors de la zone de flottaison. Cela peut améliorer les performances de la page."
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.MediaUpload, {
+    onSelect: media => setAttributes({
+      customThumbnail: media.url
+    }),
+    allowedTypes: ["image"],
+    render: ({
+      open
+    }) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
+      onClick: open,
+      isSecondary: true,
+      style: {
+        marginTop: "1rem"
+      }
+    }, customThumbnail ? "Modifier l’image personnalisée" : "Choisir une image personnalisée")
+  }), customThumbnail && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    style: {
+      marginTop: "10px"
+    }
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+    src: customThumbnail,
+    alt: "Miniature personnalis\xE9e",
+    style: {
+      width: "100%",
+      borderRadius: 4
+    }
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
+    onClick: () => setAttributes({
+      customThumbnail: ""
+    }),
+    isLink: true,
+    isDestructive: true,
+    style: {
+      marginBottom: "2rem"
+    }
+  }, "Supprimer l’image"))));
 }
 
 /***/ }),
@@ -237,9 +272,11 @@ function save({
 }) {
   const {
     videoId,
+    customThumbnail,
     lazyLoading
   } = attributes;
   const blockProps = _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps.save();
+  const imageURL = customThumbnail ? customThumbnail : `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     ...blockProps,
     role: "button",
@@ -248,7 +285,7 @@ function save({
     "data-video-id": videoId,
     "data-video-lazyloading": lazyLoading ? "lazy" : "eager",
     style: {
-      backgroundImage: `url(https://img.youtube.com/vi/${videoId}/maxresdefault.jpg)`,
+      backgroundImage: `url(${imageURL})`,
       backgroundSize: 'cover',
       backgroundPosition: 'center'
     }

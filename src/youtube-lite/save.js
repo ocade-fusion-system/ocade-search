@@ -1,8 +1,12 @@
 import { useBlockProps } from "@wordpress/block-editor";
 
 export default function save({ attributes }) {
-  const { videoId, lazyLoading } = attributes;
+  const { videoId, customThumbnail, lazyLoading } = attributes;
   const blockProps = useBlockProps.save();
+
+  const imageURL = customThumbnail
+    ? customThumbnail
+    : `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
 
   return <div
     {...blockProps}
@@ -12,7 +16,7 @@ export default function save({ attributes }) {
     data-video-id={videoId}
     data-video-lazyloading={lazyLoading ? "lazy" : "eager"}
     style={{
-      backgroundImage: `url(https://img.youtube.com/vi/${videoId}/maxresdefault.jpg)`,
+      backgroundImage: `url(${imageURL})`,
       backgroundSize: 'cover',
       backgroundPosition: 'center',
     }}
