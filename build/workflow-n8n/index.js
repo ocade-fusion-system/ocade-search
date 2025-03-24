@@ -8,7 +8,7 @@
   \*************************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":2,"name":"ocade-blocks/workflow-n8n","version":"1.0.0","category":"widgets","keywords":["ocade","workflow","n8n","iframe"],"textdomain":"ocade-blocks","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","supports":{"anchor":true,"align":["wide","full"]},"attributes":{"preview":{"type":"boolean","default":false},"workflow":{"type":"string","default":""},"frame":{"type":"boolean","default":false},"collapseformobile":{"type":"boolean","default":false},"clicktointeract":{"type":"boolean","default":true},"hidecanvaserrors":{"type":"boolean","default":true},"disableinteractivity":{"type":"boolean","default":false},"theme":{"type":"string","default":"dark"},"src":{"type":"string","default":""},"borderStyle":{"type":"string","default":"solid"},"borderWidth":{"type":"number","default":5},"borderColor":{"type":"string","default":"#ececfe"},"borderRadius":{"type":"number","default":10}},"example":{"attributes":{"preview":true}}}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":2,"name":"ocade-blocks/workflow-n8n","version":"1.0.0","category":"widgets","keywords":["ocade","workflow","n8n","iframe"],"textdomain":"ocade-blocks","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","supports":{"anchor":true,"align":["wide","full"]},"attributes":{"preview":{"type":"boolean","default":false},"workflow":{"type":"string","default":""},"frame":{"type":"boolean","default":false},"collapseformobile":{"type":"boolean","default":false},"clicktointeract":{"type":"boolean","default":true},"hidecanvaserrors":{"type":"boolean","default":true},"disableinteractivity":{"type":"boolean","default":false},"theme":{"type":"string","default":"dark"},"src":{"type":"string","default":""},"borderStyle":{"type":"string","default":"solid"},"borderWidth":{"type":"number","default":5},"borderColor":{"type":"string","default":"#ececfe"},"borderRadius":{"type":"number","default":30},"minHeight":{"type":"number","default":500}},"example":{"attributes":{"preview":true}}}');
 
 /***/ }),
 
@@ -33,14 +33,16 @@ function Block(props) {
     borderStyle,
     borderWidth,
     borderColor,
-    borderRadius
+    borderRadius,
+    minHeight
   } = props.attributes;
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     ...blockProps,
     style: {
       border: `${borderWidth}px ${borderStyle} ${borderColor}`,
       borderRadius: `${borderRadius}px`,
-      overflow: 'hidden'
+      overflow: 'hidden',
+      minHeight: `${minHeight}px`
     }
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Emplacement r\xE9serv\xE9 \xE0 l'affichage du workflow."));
 }
@@ -83,7 +85,8 @@ function Inspecteur(props) {
     borderStyle,
     borderWidth,
     borderColor,
-    borderRadius
+    borderRadius,
+    minHeight
   } = attributes;
   const fixedColors = [{
     name: "Orange",
@@ -233,7 +236,16 @@ function Inspecteur(props) {
       borderRadius: value
     }),
     min: 0,
-    max: 50
+    max: 100
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
+    label: "Hauteur minimale (px)",
+    value: minHeight,
+    onChange: value => setAttributes({
+      minHeight: value
+    }),
+    min: 0,
+    max: 5000,
+    step: 10
   })));
 }
 
@@ -400,7 +412,8 @@ function save(props) {
       borderStyle,
       borderWidth,
       borderColor,
-      borderRadius
+      borderRadius,
+      minHeight
     }
   } = props;
   const blockProps = _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps.save();
@@ -423,7 +436,9 @@ function save(props) {
     style: {
       border: `${borderWidth}px ${borderStyle} ${borderColor}`,
       borderRadius: `${borderRadius}px`,
-      overflow: 'hidden'
+      overflow: 'hidden',
+      "--n8n-iframe-border-radius": `${borderRadius}px`,
+      "--n8n-workflow-min-height": `${minHeight}px`
     }
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("n8n-demo", {
     ...htmlAttributes

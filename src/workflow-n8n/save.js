@@ -14,7 +14,8 @@ export default function save(props) {
       borderStyle,
       borderWidth,
       borderColor,
-      borderRadius
+      borderRadius,
+      minHeight
     }
   } = props;
 
@@ -37,7 +38,12 @@ export default function save(props) {
   }, {});
 
   return (
-    <div {...blockProps} style={{ border: `${borderWidth}px ${borderStyle} ${borderColor}`, borderRadius: `${borderRadius}px`, overflow: 'hidden' }}>
+    <div {...blockProps} style={{ 
+      border: `${borderWidth}px ${borderStyle} ${borderColor}`, 
+      borderRadius: `${borderRadius}px`, overflow: 'hidden',
+      "--n8n-iframe-border-radius": `${borderRadius}px`,
+      "--n8n-workflow-min-height": `${minHeight}px`
+      }}>
       <n8n-demo {...htmlAttributes}></n8n-demo>
     </div>
   );

@@ -64,7 +64,11 @@
     },
     "borderRadius": {
       "type": "number",
-      "default": 10
+      "default": 30
+    },
+    "minHeight": {
+      "type": "number",
+      "default": 500
     }
   },
   "example": {

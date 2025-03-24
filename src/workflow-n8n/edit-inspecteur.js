@@ -27,6 +27,7 @@ export default function Inspecteur(props) {
     borderWidth,
     borderColor,
     borderRadius,
+    minHeight
   } = attributes;
 
   const fixedColors = [
@@ -129,7 +130,15 @@ export default function Inspecteur(props) {
           value={borderRadius}
           onChange={(value) => setAttributes({ borderRadius: value })}
           min={0}
-          max={50}
+          max={100}
+        />
+        <RangeControl
+          label="Hauteur minimale (px)"
+          value={minHeight}
+          onChange={(value) => setAttributes({ minHeight: value })}
+          min={0}
+          max={5000}
+          step={10}
         />
       </PanelBody>
     </InspectorControls>
