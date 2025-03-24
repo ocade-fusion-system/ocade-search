@@ -1,0 +1,34 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 2,
+	"name": "ocade-blocks/youtube-lite",
+	"version": "1.0.0",
+	"category": "widgets",
+  "keywords": ["ocade", "youtube", "lite", "iframe", "leger", "video"],
+	"textdomain": "ocade-blocks",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+  "supports": {
+    "anchor": true,
+    "align": ["wide", "full"]
+  },
+  "attributes": {
+    "preview": {
+      "type": "boolean",
+      "default": false
+    },
+    "videoId": {
+      "type": "string"
+    },
+    "lazyLoad": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "example": {
+    "attributes": {
+      "preview": true
+    }
+  }
+}
