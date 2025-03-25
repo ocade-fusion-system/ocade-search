@@ -39,6 +39,22 @@
     "lazyLoad": {
       "type": "boolean",
       "default": false
+    },
+    "videoTitle": {
+      "type": "string",
+      "default": ""
+    },
+    "videoDescription": {
+      "type": "string",
+      "default": ""
+    },
+    "videoDateCreation": {
+      "type": "string",
+      "default": ""
+    },
+    "urlPageSite": {
+      "type": "string",
+      "default": ""
     }
   },
   "example": {

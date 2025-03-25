@@ -2,22 +2,59 @@ import { InspectorControls, MediaUpload } from "@wordpress/block-editor";
 import {
   PanelBody,
   TextControl,
+  TextareaControl,
   ToggleControl,
   Button,
+  DatePicker,
 } from "@wordpress/components";
+import { useEffect } from "@wordpress/element";
+import { useSelect } from "@wordpress/data";
 
-export default function Inspecteur({ attributes, setAttributes }) {
-  const { videoId, customThumbnail, lazyLoading } = attributes;
+export default function Inspecteur({ attributes, setAttributes, clientId }) {
+  const {
+    videoId,
+    customThumbnail,
+    lazyLoading,
+    videoTitle,
+    videoDescription,
+    videoDateCreation,
+    urlPageSite,
+  } = attributes;
+
+  // ✅ Définir la date du jour si non encore définie
+  useEffect(() => {
+    if (!videoDateCreation) {
+      const today = new Date().toISOString().split("T")[0];
+      setAttributes({ videoDateCreation: today });
+    }
+  }, []);
+
+  // ✅ Récupération automatique du slug de la page (si possible)
+  const { postSlug, siteUrl } = useSelect((select) => {
+    const post = select("core/editor").getCurrentPost();
+    const site = select("core").getSite();
+    return {
+      postSlug: post?.slug || "",
+      siteUrl: site?.url || "",
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!urlPageSite && postSlug && siteUrl) {
+      const fullUrl = siteUrl.replace(/\/$/, "") + "/" + postSlug;
+      setAttributes({ urlPageSite: fullUrl });
+    }
+  }, [postSlug, siteUrl]);
 
   return (
     <InspectorControls>
-      <PanelBody title={"Vidéo Youtube"} initialOpen={true}>
+      <PanelBody title={"Vidéo YouTube"} initialOpen={true}>
         <TextControl
           label={"ID de la vidéo YouTube"}
           value={videoId}
           onChange={(value) => setAttributes({ videoId: value })}
           help={
-            "https://www.youtube.com/watch?v=dQw4w9WgXcQ alors ID est dQw4w9WgXcQ"
+            "https://www.youtube.com/watch?v=dQw4w9WgXcQ → l’ID est : dQw4w9WgXcQ"
           }
         />
         <ToggleControl
@@ -25,7 +62,7 @@ export default function Inspecteur({ attributes, setAttributes }) {
           checked={lazyLoading}
           onChange={(value) => setAttributes({ lazyLoading: value })}
           help={
-            "Activez si la vidéo est hors de la zone de flottaison. Cela peut améliorer les performances de la page."
+            "Activez si la vidéo est en dehors de la zone visible initialement."
           }
         />
         <MediaUpload
@@ -56,6 +93,39 @@ export default function Inspecteur({ attributes, setAttributes }) {
             </Button>
           </div>
         )}
+      </PanelBody>
+
+      <PanelBody title="Détails de la vidéo" initialOpen={true}>
+        <TextControl
+          label="Titre de la vidéo"
+          value={videoTitle}
+          onChange={(value) => setAttributes({ videoTitle: value })}
+        />
+        <TextareaControl
+          label="Description"
+          value={videoDescription}
+          onChange={(value) => setAttributes({ videoDescription: value })}
+        />
+        <div style={{ marginTop: "1rem" }}>
+          <label style={{ display: "block", marginBottom: "8px" }}>
+            Date de création
+          </label>
+          <DatePicker
+            currentDate={videoDateCreation}
+            onChange={(date) => {
+              const formatted = new Date(date).toISOString().split("T")[0];
+              setAttributes({ videoDateCreation: formatted });
+            }}
+            __nextRemoveHelpButton
+            __nextRemoveResetButton
+          />
+        </div>
+        <TextControl
+          label="URL de la page sur le site"
+          value={urlPageSite}
+          onChange={(value) => setAttributes({ urlPageSite: value })}
+          help="Par défaut, cela reprend le slug de la page actuelle."
+        />
       </PanelBody>
     </InspectorControls>
   );

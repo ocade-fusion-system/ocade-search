@@ -8,7 +8,7 @@
   \*************************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":2,"name":"ocade-blocks/youtube-lite","version":"1.0.0","category":"widgets","keywords":["ocade","youtube","lite","iframe","leger","video"],"textdomain":"ocade-blocks","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","supports":{"anchor":true,"align":["wide","full"],"defaultAlign":"wide"},"attributes":{"preview":{"type":"boolean","default":false},"videoId":{"type":"string"},"customThumbnail":{"type":"string","default":""},"lazyLoad":{"type":"boolean","default":false}},"example":{"attributes":{"preview":true}}}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":2,"name":"ocade-blocks/youtube-lite","version":"1.0.0","category":"widgets","keywords":["ocade","youtube","lite","iframe","leger","video"],"textdomain":"ocade-blocks","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","supports":{"anchor":true,"align":["wide","full"],"defaultAlign":"wide"},"attributes":{"preview":{"type":"boolean","default":false},"videoId":{"type":"string"},"customThumbnail":{"type":"string","default":""},"lazyLoad":{"type":"boolean","default":false},"videoTitle":{"type":"string","default":""},"videoDescription":{"type":"string","default":""},"videoDateCreation":{"type":"string","default":""},"urlPageSite":{"type":"string","default":""}},"example":{"attributes":{"preview":true}}}');
 
 /***/ }),
 
@@ -52,20 +52,62 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_4__);
+
+
 
 
 
 function Inspecteur({
   attributes,
-  setAttributes
+  setAttributes,
+  clientId
 }) {
   const {
     videoId,
     customThumbnail,
-    lazyLoading
+    lazyLoading,
+    videoTitle,
+    videoDescription,
+    videoDateCreation,
+    urlPageSite
   } = attributes;
+
+  // ✅ Définir la date du jour si non encore définie
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useEffect)(() => {
+    if (!videoDateCreation) {
+      const today = new Date().toISOString().split("T")[0];
+      setAttributes({
+        videoDateCreation: today
+      });
+    }
+  }, []);
+
+  // ✅ Récupération automatique du slug de la page (si possible)
+  const {
+    postSlug,
+    siteUrl
+  } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_4__.useSelect)(select => {
+    const post = select("core/editor").getCurrentPost();
+    const site = select("core").getSite();
+    return {
+      postSlug: post?.slug || "",
+      siteUrl: site?.url || ""
+    };
+  }, []);
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useEffect)(() => {
+    if (!urlPageSite && postSlug && siteUrl) {
+      const fullUrl = siteUrl.replace(/\/$/, "") + "/" + postSlug;
+      setAttributes({
+        urlPageSite: fullUrl
+      });
+    }
+  }, [postSlug, siteUrl]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.InspectorControls, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
-    title: "Vidéo Youtube",
+    title: "Vidéo YouTube",
     initialOpen: true
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
     label: "ID de la vidéo YouTube",
@@ -73,14 +115,14 @@ function Inspecteur({
     onChange: value => setAttributes({
       videoId: value
     }),
-    help: "https://www.youtube.com/watch?v=dQw4w9WgXcQ alors ID est dQw4w9WgXcQ"
+    help: "https://www.youtube.com/watch?v=dQw4w9WgXcQ → l’ID est : dQw4w9WgXcQ"
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToggleControl, {
     label: "Chargement différé",
     checked: lazyLoading,
     onChange: value => setAttributes({
       lazyLoading: value
     }),
-    help: "Activez si la vidéo est hors de la zone de flottaison. Cela peut améliorer les performances de la page."
+    help: "Activez si la vidéo est en dehors de la zone visible initialement."
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.MediaUpload, {
     onSelect: media => setAttributes({
       customThumbnail: media.url
@@ -115,7 +157,48 @@ function Inspecteur({
     style: {
       marginBottom: "2rem"
     }
-  }, "Supprimer l’image"))));
+  }, "Supprimer l’image"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
+    title: "D\xE9tails de la vid\xE9o",
+    initialOpen: true
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
+    label: "Titre de la vid\xE9o",
+    value: videoTitle,
+    onChange: value => setAttributes({
+      videoTitle: value
+    })
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextareaControl, {
+    label: "Description",
+    value: videoDescription,
+    onChange: value => setAttributes({
+      videoDescription: value
+    })
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    style: {
+      marginTop: "1rem"
+    }
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    style: {
+      display: "block",
+      marginBottom: "8px"
+    }
+  }, "Date de cr\xE9ation"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.DatePicker, {
+    currentDate: videoDateCreation,
+    onChange: date => {
+      const formatted = new Date(date).toISOString().split("T")[0];
+      setAttributes({
+        videoDateCreation: formatted
+      });
+    },
+    __nextRemoveHelpButton: true,
+    __nextRemoveResetButton: true
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
+    label: "URL de la page sur le site",
+    value: urlPageSite,
+    onChange: value => setAttributes({
+      urlPageSite: value
+    }),
+    help: "Par d\xE9faut, cela reprend le slug de la page actuelle."
+  })));
 }
 
 /***/ }),
@@ -273,11 +356,25 @@ function save({
   const {
     videoId,
     customThumbnail,
-    lazyLoading
+    lazyLoading,
+    videoTitle,
+    videoDescription,
+    videoDateCreation,
+    urlPageSite
   } = attributes;
   const blockProps = _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps.save();
   const imageURL = customThumbnail ? customThumbnail : `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "VideoObject",
+    name: videoTitle || "Titre de la vidéo",
+    description: videoDescription || "Description de la vidéo non renseignée.",
+    thumbnailUrl: `https://img.youtube.com/vi/${videoId}/0.jpg`,
+    uploadDate: videoDateCreation || new Date().toISOString().split("T")[0],
+    embedUrl: `https://www.youtube-nocookie.com/embed/${videoId}`,
+    contentUrl: urlPageSite || ""
+  };
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     ...blockProps,
     role: "button",
     tabIndex: "0",
@@ -286,10 +383,12 @@ function save({
     "data-video-lazyloading": lazyLoading ? "lazy" : "eager",
     style: {
       backgroundImage: `url(${imageURL})`,
-      backgroundSize: 'cover',
-      backgroundPosition: 'center'
+      backgroundSize: "cover",
+      backgroundPosition: "center"
     }
-  });
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("script", {
+    type: "application/ld+json"
+  }, JSON.stringify(structuredData)));
 }
 
 /***/ }),
@@ -321,6 +420,26 @@ module.exports = window["wp"]["blocks"];
 /***/ ((module) => {
 
 module.exports = window["wp"]["components"];
+
+/***/ }),
+
+/***/ "@wordpress/data":
+/*!******************************!*\
+  !*** external ["wp","data"] ***!
+  \******************************/
+/***/ ((module) => {
+
+module.exports = window["wp"]["data"];
+
+/***/ }),
+
+/***/ "@wordpress/element":
+/*!*********************************!*\
+  !*** external ["wp","element"] ***!
+  \*********************************/
+/***/ ((module) => {
+
+module.exports = window["wp"]["element"];
 
 /***/ }),
 
