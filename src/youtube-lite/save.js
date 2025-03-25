@@ -23,7 +23,9 @@ export default function save({ attributes }) {
     name: videoTitle || "Titre de la vidéo",
     description: videoDescription || "Description de la vidéo non renseignée.",
     thumbnailUrl: `https://img.youtube.com/vi/${videoId}/0.jpg`,
-    uploadDate: videoDateCreation || new Date().toISOString().split("T")[0],
+    uploadDate: videoDateCreation
+    ? new Date(videoDateCreation).toISOString()
+    : new Date().toISOString(),
     embedUrl: `https://www.youtube-nocookie.com/embed/${videoId}`,
     contentUrl: urlPageSite || "",
   };
