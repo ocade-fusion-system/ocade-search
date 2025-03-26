@@ -7,7 +7,7 @@ add_filter('site_transient_update_plugins', function ($transient) {
 
   // Définition dynamique du plugin
   $organisation_github = 'ocade-fusion-system'; // ORGANISATION_GITHUB
-  $plugin_slug = 'ocade-blocks'; // DEPOT_GITHUB
+  $plugin_slug = 'ocade-search'; // DEPOT_GITHUB
   $plugin_file = WP_PLUGIN_DIR . '/' . $plugin_slug . '/' . $plugin_slug . '.php';
   $github_api_url = "https://api.github.com/repos/$organisation_github/$plugin_slug/releases/latest";
   $repo_url = "https://github.com/$organisation_github/$plugin_slug";

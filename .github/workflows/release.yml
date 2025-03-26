@@ -44,29 +44,29 @@ jobs:
           echo "Nouvelle version : $NEW_VERSION"
           echo "VERSION=$NEW_VERSION" >> $GITHUB_ENV
 
-      - name: Update Version in ocade-blocks.php
+      - name: Update Version in ocade-search.php
         run: |
           echo "Avant modification :"
-          cat ocade-blocks.php
+          cat ocade-search.php
 
-          # Mise à jour de la version dans ocade-blocks.php
-          sed -i "s/\(Version:\s*\)[0-9.]*/\1$VERSION/" ocade-blocks.php
+          # Mise à jour de la version dans ocade-search.php
+          sed -i "s/\(Version:\s*\)[0-9.]*/\1$VERSION/" ocade-search.php
 
           echo "Après modification :"
-          cat ocade-blocks.php
+          cat ocade-search.php
 
       - name: Create version.txt
         run: echo $VERSION > version.txt
 
       - name: Create Plugin ZIP
         run: |
-          zip -r ocade-blocks.zip * .[^.]* -x ".git/*" ".github/*" "README.md" "*.zip"
+          zip -r ocade-search.zip * .[^.]* -x ".git/*" ".github/*" "README.md" "*.zip"
 
       - name: Commit Changes
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add ocade-blocks.php version.txt
+          git add ocade-search.php version.txt
           git commit -m "Update version to $VERSION" || echo "No changes to commit"
           git push origin master
 
@@ -84,7 +84,7 @@ jobs:
           draft: false
           prerelease: false
           files: |
-            ocade-blocks.zip
+            ocade-search.zip
             version.txt
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
