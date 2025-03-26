@@ -1,33 +1,40 @@
 <?php
 
 function ocade_render_search_form() { ?>
-  <form
-    id="ocade-search-form"
-    role="search"
-    method="get"
-    action="<?php echo esc_url(home_url('/')); ?>"
-    aria-label="Recherche d’articles sur le site">
+  <dialog id="ocade-search-dialog" aria-labelledby="dialog-title">
+    <div>
+      <button id="ocade-search-close" aria-label="Fermer la recherche" title="Fermer la recherche d'article" onclick="document.getElementById('ocade-search-dialog').close();">×</button>
 
-    <?php $valeur_recherche = isset($_GET['s']) ? esc_attr($_GET['s']) : ''; ?>
-    <input
-      type="text"
-      id="ocade-search-input"
-      name="s"
-      placeholder="Ex : automatisation n8n"
-      autocomplete="off"
-      aria-describedby="ocade-search-help"
-      aria-label="Champ de recherche"
-      value="<?php echo $valeur_recherche; ?>">
+      <p id="dialog-title">RECHERCHER UN ARTICLE</p>
 
-    <input type="hidden" name="post_type" value="post">
+      <form
+        id="ocade-search-form"
+        role="search"
+        method="get"
+        action="<?php echo esc_url(home_url('/')); ?>"
+        aria-label="Recherche d’articles sur le site">
 
-    <p id="ocade-search-help" class="screen-reader-text">
-      Tapez votre recherche et les résultats s’afficheront automatiquement en dessous.
-    </p>
-  </form>
+        <?php $valeur_recherche = isset($_GET['s']) ? esc_attr($_GET['s']) : ''; ?>
+        <input
+          type="text"
+          id="ocade-search-input"
+          name="s"
+          placeholder="Ex : automatisation n8n"
+          autocomplete="off"
+          aria-describedby="ocade-search-help"
+          aria-label="Champ de recherche"
+          onkeydown="if (event.key === 'Enter') event.preventDefault();"
+          value="<?php echo $valeur_recherche; ?>">
 
+        <input type="hidden" name="post_type" value="post">
 
-  <div id="ocade-search-results" style="margin-top:20px;"></div>
+        <p id="ocade-search-help" class="screen-reader-text">
+          Tapez votre recherche et les résultats s’afficheront automatiquement en dessous.
+        </p>
+      </form>
+      <div id="ocade-search-results" style="margin-top:20px;"></div>
+    </div>
+  </dialog>
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -93,9 +100,8 @@ function ocade_render_search_form() { ?>
             const html = posts.map(post => {
               const img = post._embedded['wp:featuredmedia']?.[0]?.source_url || '';
               return `
-          <div style="display: flex; margin-bottom: 10px;">
-            ${img ? `<img src="${img}" style="width: 60px; height: 60px; object-fit: cover; margin-right: 10px;">` : ''}
-            <a href="${post.link}" style="font-weight: bold;">${post.title.rendered}</a>
+          <div>
+            <a href="${post.link}"> ${img ? `<img src="${img}">` : ''} ${post.title.rendered}</a>
           </div>
         `;
             }).join('');
