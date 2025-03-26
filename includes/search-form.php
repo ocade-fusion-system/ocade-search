@@ -3,7 +3,7 @@
 function ocade_render_search_form() { ?>
   <dialog id="ocade-search-dialog" aria-labelledby="dialog-title">
     <div>
-      <button id="ocade-search-close" aria-label="Fermer la recherche" title="Fermer la recherche d'article" onclick="document.getElementById('ocade-search-dialog').close();">×</button>
+      <button id="ocade-search-close" aria-label="Fermer la recherche" title="Fermer la recherche d'article" onclick="document.getElementById('ocade-search-dialog').close();document.body.classList.remove('modal-open');">×</button>
 
       <p id="dialog-title">RECHERCHER UN ARTICLE</p>
 
@@ -45,7 +45,6 @@ function ocade_render_search_form() { ?>
       let index = null;
       let indexLoaded = false;
 
-      // Normalisation
       function normalize(text) {
         return text
           .toLowerCase()
@@ -54,7 +53,6 @@ function ocade_render_search_form() { ?>
           .trim();
       }
 
-      // Fonction principale de recherche
       function lancerRecherche() {
         const inputValue = input.value;
         const terms = normalize(inputValue).split(/\s+/).filter(Boolean);
@@ -65,21 +63,19 @@ function ocade_render_search_form() { ?>
 
         let matchingIDs = null;
 
-        terms.forEach((term, i) => {
-          const isLastWord = i === terms.length - 1;
-          const isTermComplete = inputValue.endsWith(' ');
-
+        terms.forEach((term) => {
           let motsMatchés = [];
 
-          if (isLastWord && !isTermComplete) {
-            // Mot en cours de frappe : recherche large
+          // Recherche stricte sauf si le mot est très court (<3 caractères)
+          if (term.length < 3) {
             motsMatchés = Object.keys(index).filter(key => key.includes(term));
           } else {
-            // Mot terminé : recherche stricte
             motsMatchés = Object.keys(index).filter(key => key.startsWith(term));
           }
 
-          const idsTrouvés = motsMatchés.flatMap(key => index[key]);
+          const idsTrouvés = motsMatchés
+            .flatMap(key => index[key])
+            .filter((v, i, a) => a.indexOf(v) === i); // supprime doublons
 
           if (idsTrouvés.length > 0) {
             matchingIDs = matchingIDs ?
@@ -93,30 +89,32 @@ function ocade_render_search_form() { ?>
           return;
         }
 
-        const query = matchingIDs.map(id => 'include[]=' + id).join('&');
-        fetch('<?php echo esc_url(rest_url('wp/v2/posts?_embed&per_page=10&')); ?>' + query)
+        const uniqueIDs = [...new Set(matchingIDs)];
+        const query = 'include=' + uniqueIDs.join(',');
+
+        // Debug
+        console.log('matchingIDs (uniques) :', uniqueIDs);
+        console.log('Requête REST finale :', '<?php echo esc_url(rest_url('wp/v2/posts?_embed&per_page=10&')); ?>' + query);
+
+        fetch('<?php echo esc_url(rest_url('wp/v2/posts')); ?>?_embed=true&per_page=10&' + query)
           .then(res => res.json())
           .then(posts => {
             const html = posts.map(post => {
-              const img = post._embedded['wp:featuredmedia']?.[0]?.source_url || '';
+              const img = post._embedded?.['wp:featuredmedia']?.[0]?.source_url || '';
               return `
-          <div>
-            <a href="${post.link}"> ${img ? `<img src="${img}">` : ''} ${post.title.rendered}</a>
-          </div>
-        `;
+                <div>
+                  <a href="${post.link}">${img ? `<img src="${img}">` : ''} ${post.title.rendered}</a>
+                </div>
+              `;
             }).join('');
             resultsDiv.innerHTML = html;
           });
       }
 
-
-      // Gestion de l'entrée utilisateur
       input.addEventListener('input', function() {
         clearTimeout(timeout);
-
         timeout = setTimeout(() => {
           if (!indexLoaded) {
-            // Charger l’index uniquement si non encore chargé
             fetch('<?php echo plugins_url('../index/search-index.json', __FILE__); ?>')
               .then(res => res.json())
               .then(data => {
@@ -141,8 +139,6 @@ function ocade_render_search_form() { ?>
       }
     });
   </script>
-
-
 <?php
 }
 add_action('ocade_search_form', 'ocade_render_search_form');

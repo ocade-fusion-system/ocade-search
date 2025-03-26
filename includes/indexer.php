@@ -26,17 +26,15 @@ function ocade_indexer() {
 
   wp_reset_postdata();
 
+  // Supprimer les doublons dans chaque entrée de mot-clé
+  foreach ($index as $mot => $ids) {
+    $index[$mot] = array_values(array_unique($ids));
+  }
+
   // Crée le dossier s'il n'existe pas
   $index_dir = plugin_dir_path(__FILE__) . '/../index';
-
-  // DEBUG TEMPORAIRE
-  //error_log('Chemin index : ' . $index_dir);
-
   if (!file_exists($index_dir)) mkdir($index_dir, 0755, true);
 
   // Enregistrement de l'index
-  $result = file_put_contents($index_dir . '/search-index.json', json_encode($index));
-
-  //if ($result === false) error_log('❌ Impossible d’écrire le fichier d’index');
-  //else error_log('✅ Index écrit avec succès');
+  file_put_contents($index_dir . '/search-index.json', json_encode($index));
 }
