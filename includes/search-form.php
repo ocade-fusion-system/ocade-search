@@ -23,8 +23,18 @@ function ocade_render_search_form() { ?>
           autocomplete="off"
           aria-describedby="ocade-search-help"
           aria-label="Champ de recherche"
-          onkeydown="if (event.key === 'Enter') event.preventDefault();"
-          value="<?php echo $valeur_recherche; ?>">
+          value="<?php echo $valeur_recherche; ?>"
+          onkeydown="
+          if (event.key === 'Enter') event.preventDefault();
+          else if (event.key === 'ArrowDown') {
+            const link = document.querySelector('#ocade-search-results a');
+            if (link) {
+              event.preventDefault();
+              link.focus();
+            }
+          }
+        "
+>
 
         <input type="hidden" name="post_type" value="post">
 
