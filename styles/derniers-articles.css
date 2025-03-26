@@ -47,17 +47,13 @@
   border-right: 1px solid var(--wp--preset--color--gris);
   border-bottom: 1px solid var(--wp--preset--color--gris);
   border-radius: 0 0 4px 4px;
-}
 
-@media (min-width: 460px) {
-  .wp-block-ocade-blocks-derniers-articles .figure-link+div {
+  @media (min-width: 460px) {
     margin-left: auto;
     margin-right: auto;
   }
-}
 
-@media (min-width: 1280px) {
-  .wp-block-ocade-blocks-derniers-articles .figure-link+div {
+  @media (min-width: 1280px) {
     margin-left: 2rem;
     margin-right: 2rem;
   }
