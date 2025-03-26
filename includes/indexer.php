@@ -1,6 +1,15 @@
 <?php
 
-/** Indexer les articles pour la recherche. */
+/** Normalise un mot comme dans le JS (docker-compose => dockercompose) */
+function ocade_normalize($text) {
+  $text = strtolower($text);
+  $text = iconv('UTF-8', 'ASCII//TRANSLIT', $text); // enlève accents
+  $text = preg_replace('/[^a-z0-9 ]/', '', $text); // enlève tout sauf lettres/chiffres/espace
+  $text = trim($text);
+  return $text;
+}
+
+/** Indexer les articles pour la recherche */
 function ocade_indexer() {
   $query = new WP_Query([
     'post_type' => 'post',
@@ -17,7 +26,7 @@ function ocade_indexer() {
 
     if ($ngrammes) {
       foreach (explode(',', $ngrammes) as $mot) {
-        $mot = trim(strtolower($mot));
+        $mot = ocade_normalize($mot); // ⚠️ normalisation ici !
         if (!isset($index[$mot])) $index[$mot] = [];
         $index[$mot][] = $id;
       }
