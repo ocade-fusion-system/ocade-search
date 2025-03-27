@@ -90,12 +90,7 @@ function ocade_render_search_form() { ?>
         terms.forEach((term) => {
           let motsMatchés = [];
 
-          // Recherche stricte sauf si le mot est très court (<3 caractères)
-          if (term.length < 3) {
-            motsMatchés = Object.keys(index).filter(key => key.includes(term));
-          } else {
-            motsMatchés = Object.keys(index).filter(key => key.startsWith(term));
-          }
+          motsMatchés = Object.keys(index).filter(key => key.startsWith(term));
 
           const idsTrouvés = motsMatchés
             .flatMap(key => index[key])
