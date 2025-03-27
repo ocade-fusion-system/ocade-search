@@ -14,17 +14,18 @@ function ocade_render_search_form() { ?>
         action="<?php echo esc_url(home_url('/')); ?>"
         aria-label="Recherche d’articles sur le site">
 
-        <?php $valeur_recherche = isset($_GET['s']) ? esc_attr($_GET['s']) : ''; ?>
-        <input
-          type="text"
-          id="ocade-search-input"
-          name="s"
-          placeholder="Ex : automatisation n8n"
-          autocomplete="off"
-          aria-describedby="ocade-search-help"
-          aria-label="Champ de recherche"
-          value="<?php echo $valeur_recherche; ?>"
-          onkeydown="
+        <div class="wrapper-loader" style="position: relative;">
+          <?php $valeur_recherche = isset($_GET['s']) ? esc_attr($_GET['s']) : ''; ?>
+          <input
+            type="text"
+            id="ocade-search-input"
+            name="s"
+            placeholder="Ex : automatisation n8n"
+            autocomplete="off"
+            aria-describedby="ocade-search-help"
+            aria-label="Champ de recherche"
+            value="<?php echo $valeur_recherche; ?>"
+            onkeydown="
           if (event.key === 'Enter') event.preventDefault();
           else if (event.key === 'ArrowDown') {
             const link = document.querySelector('#ocade-search-results a');
@@ -33,8 +34,20 @@ function ocade_render_search_form() { ?>
               link.focus();
             }
           }
-        "
->
+        ">
+          <div id="ocade-loader" style="">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 100 100"
+              preserveAspectRatio="xMidYMid">
+              <circle cx="50" cy="50" fill="none"
+                stroke="#303579" stroke-width="10" r="35"
+                stroke-dasharray="164.93361431346415 56.97787143782138">
+              </circle>
+            </svg>
+          </div>
+        </div>
 
         <input type="hidden" name="post_type" value="post">
 
@@ -50,6 +63,7 @@ function ocade_render_search_form() { ?>
     document.addEventListener('DOMContentLoaded', function() {
       const input = document.getElementById('ocade-search-input');
       const resultsDiv = document.getElementById('ocade-search-results');
+      const loader = document.getElementById('ocade-loader');
 
       let timeout;
       let index = null;
@@ -102,10 +116,7 @@ function ocade_render_search_form() { ?>
         const uniqueIDs = [...new Set(matchingIDs)];
         const query = 'include=' + uniqueIDs.join(',');
 
-        // Debug
-        console.log('matchingIDs (uniques) :', uniqueIDs);
-        console.log('Requête REST finale :', '<?php echo esc_url(rest_url('wp/v2/posts?_embed&per_page=10&')); ?>' + query);
-
+        loader.style.display = 'flex';
         fetch('<?php echo esc_url(rest_url('wp/v2/posts')); ?>?_embed=true&per_page=10&' + query)
           .then(res => res.json())
           .then(posts => {
@@ -118,7 +129,7 @@ function ocade_render_search_form() { ?>
               `;
             }).join('');
             resultsDiv.innerHTML = html;
-          });
+          }).finally(() => loader.style.display = 'none');
       }
 
       input.addEventListener('input', function() {
@@ -139,13 +150,14 @@ function ocade_render_search_form() { ?>
       });
 
       if (input.value.trim().length > 0) {
+        loader.style.display = 'flex';
         fetch('<?php echo plugins_url('../index/search-index.json', __FILE__); ?>')
           .then(res => res.json())
           .then(data => {
             index = data;
             indexLoaded = true;
             lancerRecherche();
-          });
+          }).finally(() => loader.style.display = 'none');
       }
     });
   </script>

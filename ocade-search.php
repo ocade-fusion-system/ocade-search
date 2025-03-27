@@ -17,6 +17,11 @@ require_once plugin_dir_path(__FILE__) . 'includes/ajax-indexation.php'; // Perm
 require_once plugin_dir_path(__FILE__) . 'includes/indexer.php'; // Permettre de regénérer l'index de recherche
 require_once plugin_dir_path(__FILE__) . 'includes/search-form.php'; // Ajouter un formulaire de recherche personnalisé via le hook do_action('ocade_search_form');
 
+// Charger le fichier style.css du plugin
+add_action('wp_enqueue_scripts', function () {
+  wp_enqueue_style('ocade-search', plugin_dir_url(__FILE__) . 'style.css');
+});
+
 
 /** Créer une tâche CRON quotidienne à 4H de réindexation */
 register_activation_hook(__FILE__, function () {
