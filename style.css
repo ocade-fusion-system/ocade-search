@@ -135,6 +135,7 @@
 #ocade-search-dialog #ocade-search-results .wrapper-suggestions {
   order: 1;
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   gap: .5rem;
 }
