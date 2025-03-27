@@ -26,36 +26,28 @@ function ocade_render_search_form() { ?>
             aria-label="Champ de recherche"
             value="<?php echo $valeur_recherche; ?>"
             onkeydown="
-          if (event.key === 'Enter') event.preventDefault();
-          else if (event.key === 'ArrowDown') {
-            const link = document.querySelector('#ocade-search-results a');
-            if (link) {
-              event.preventDefault();
-              link.focus();
-            }
-          }
-        ">
+              if (event.key === 'Enter') event.preventDefault();
+              else if (event.key === 'ArrowDown') {
+                const link = document.querySelector('#ocade-search-results a');
+                if (link) {
+                  event.preventDefault();
+                  link.focus();
+                }
+              }">
           <div id="ocade-loader" style="">
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 100 100"
-              preserveAspectRatio="xMidYMid">
-              <circle cx="50" cy="50" fill="none"
-                stroke="#303579" stroke-width="10" r="35"
-                stroke-dasharray="164.93361431346415 56.97787143782138">
-              </circle>
+            <svg width="20" height="20" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
+              <circle cx="50" cy="50" fill="none" stroke="#303579" stroke-width="10" r="35"
+                stroke-dasharray="164.93361431346415 56.97787143782138"></circle>
             </svg>
           </div>
         </div>
 
         <input type="hidden" name="post_type" value="post">
-
         <p id="ocade-search-help" class="screen-reader-text">
           Tapez votre recherche et les résultats s’afficheront automatiquement en dessous.
         </p>
       </form>
-      <div id="ocade-search-results" style="margin-top:20px;"></div>
+      <div id="ocade-search-results"></div>
     </div>
   </dialog>
 
@@ -88,6 +80,30 @@ function ocade_render_search_form() { ?>
           .filter(term => term.length >= 3 && !stopWords.includes(term));
       }
 
+      function suggérerMotsComplémentaires(ids, termsUtilisés) {
+        const compteur = {};
+        const termesIgnorés = new Set(termsUtilisés);
+
+        Object.entries(index).forEach(([mot, idList]) => {
+          idList.forEach(id => {
+            if (ids.includes(id) && !termesIgnorés.has(mot)) {
+              compteur[mot] = (compteur[mot] || 0) + 1;
+            }
+          });
+        });
+
+        return Object.entries(compteur)
+          .sort((a, b) => b[1] - a[1])
+          .slice(0, 5)
+          .map(([mot]) => mot);
+      }
+
+      window.ajouterMot = function(mot) {
+        input.value += ' ' + mot;
+        input.dispatchEvent(new Event('input'));
+      }
+
+
       function lancerRecherche() {
         const terms = normalizeAndFilterTerms(input.value);
         if (terms.length === 0) {
@@ -101,23 +117,18 @@ function ocade_render_search_form() { ?>
           const term = terms[i];
           const motsMatchés = Object.keys(index).filter(key => key.startsWith(term));
 
-          if (motsMatchés.length === 0) {
-            // Ce terme ne correspond à rien → on l’ignore et passe au suivant
-            continue;
-          }
+          if (motsMatchés.length === 0) continue;
 
           const idsTrouvés = motsMatchés
             .flatMap(key => index[key])
-            .filter((v, i, a) => a.indexOf(v) === i); // supprime doublons
+            .filter((v, i, a) => a.indexOf(v) === i);
 
           if (!matchingIDs) {
             matchingIDs = idsTrouvés;
           } else {
-            // On filtre les résultats précédents pour ne garder que ceux qui matchent aussi ce terme
             matchingIDs = matchingIDs.filter(id => idsTrouvés.includes(id));
           }
 
-          // Si à un moment donné il ne reste aucun ID, on peut arrêter
           if (matchingIDs.length === 0) break;
         }
 
@@ -133,19 +144,26 @@ function ocade_render_search_form() { ?>
         fetch('<?php echo esc_url(rest_url('wp/v2/posts')); ?>?_embed=true&per_page=10&' + query)
           .then(res => res.json())
           .then(posts => {
-            const html = posts.map(post => {
+            let html = posts.map(post => {
               const img = post._embedded?.['wp:featuredmedia']?.[0]?.source_url || '';
               return `
-          <div>
-            <a href="${post.link}">${img ? `<img src="${img}">` : ''} ${post.title.rendered}</a>
-          </div>
-        `;
+                <div class="resultat-recherche">
+                  <a href="${post.link}">${img ? `<img src="${img}">` : ''} ${post.title.rendered}</a>
+                </div>
+              `;
             }).join('');
+
+            const suggestions = suggérerMotsComplémentaires(uniqueIDs, terms);
+            if (suggestions.length > 0) {
+              html += '<div class="wrapper-suggestions">';
+              html += suggestions.map(m => `<button type="button" onclick="ajouterMot('${m}')">${m}</button>`).join(' ');
+              html += '</div>';
+            }
+
             resultsDiv.innerHTML = html;
           })
           .finally(() => loader.style.display = 'none');
       }
-
 
       input.addEventListener('input', function() {
         clearTimeout(timeout);

@@ -57,7 +57,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 2rem 0;
+  margin: 2rem 0 .5rem;
   padding: 0 .5rem;
 }
 
@@ -111,15 +111,43 @@
   padding: 0 .5rem;
 }
 
+#ocade-search-dialog #ocade-search-results .resultat-recherche {
+  order: 2;
+}
+
 #ocade-search-dialog #ocade-search-results a {
   display: flex;
   align-items: center;
   gap: 1rem;
+  background-color: var(--wp--preset--color--nuit);
+  color: white;
+  border-radius: .5rem;
 }
 
 #ocade-search-dialog #ocade-search-results img {
   width: auto;
   height: 3.5rem;
-  border-radius: 10px;
-  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+  border-top-left-radius: .5rem;
+  border-bottom-left-radius: .5rem;
 }
+
+#ocade-search-dialog #ocade-search-results .wrapper-suggestions {
+  order: 1;
+  display: flex;
+  justify-content: center;
+  gap: .5rem;
+}
+
+#ocade-search-dialog #ocade-search-results .wrapper-suggestions button {
+  position: relative;
+  top: 0;
+  right: 0;
+  width: max-content;
+  margin-bottom: .5rem;
+  padding: 0 0.5rem;
+  border: none;
+  font-size: 1rem;
+  text-transform: capitalize;
+}
+
+
