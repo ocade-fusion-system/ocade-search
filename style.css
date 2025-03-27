@@ -127,8 +127,8 @@
 #ocade-search-dialog #ocade-search-results img {
   width: auto;
   height: 3.5rem;
-  border-top-left-radius: .5rem;
-  border-bottom-left-radius: .5rem;
+  border-top-left-radius: .4rem;
+  border-bottom-left-radius: .4rem;
 }
 
 #ocade-search-dialog #ocade-search-results .wrapper-suggestions {
