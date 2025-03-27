@@ -145,7 +145,7 @@ function ocade_render_search_form() { ?>
           .then(res => res.json())
           .then(posts => {
             let html = posts.map(post => {
-              const img = post._embedded?.['wp:featuredmedia']?.[0]?.source_url || '';
+              const img = post.ocade_search_image || '';
               return `
                 <div class="resultat-recherche">
                   <a href="${post.link}">${img ? `<img src="${img}">` : ''} ${post.title.rendered}</a>

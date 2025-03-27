@@ -16,6 +16,7 @@ require_once plugin_dir_path(__FILE__) . 'includes/api-rest.php'; // Permettre l
 require_once plugin_dir_path(__FILE__) . 'includes/ajax-indexation.php'; // Permettre de regénérer l'index de recherche
 require_once plugin_dir_path(__FILE__) . 'includes/indexer.php'; // Permettre de regénérer l'index de recherche
 require_once plugin_dir_path(__FILE__) . 'includes/search-form.php'; // Ajouter un formulaire de recherche personnalisé via le hook do_action('ocade_search_form');
+require_once plugin_dir_path(__FILE__) . 'includes/image-search-fetured.php'; // Ajouter un champs image dans les articles pour la recherche
 
 // Charger le fichier style.css du plugin
 add_action('wp_enqueue_scripts', function () {
