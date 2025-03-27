@@ -69,39 +69,57 @@ function ocade_render_search_form() { ?>
       let index = null;
       let indexLoaded = false;
 
-      function normalize(text) {
+      function normalizeAndFilterTerms(text) {
+        const stopWords = [
+          'je', 'tu', 'il', 'elle', 'on', 'nous', 'vous', 'ils', 'elles',
+          'le', 'la', 'les', 'de', 'du', 'des', 'un', 'une',
+          'et', 'ou', 'en', 'dans', 'sur', 'ce', 'cet', 'cette',
+          'mon', 'ma', 'mes', 'ton', 'ta', 'tes', 'son', 'sa', 'ses',
+          'leur', 'leurs', 'ne', 'pas', 'plus', 'a', 'au', 'aux', 'avec',
+          'par', 'pour', 'que', 'qui', 'quoi', 'dont', 'où', 'comme',
+          'mais', 'donc', 'or', 'ni', 'car', 'veux', 'veut'
+        ];
+
         return text
           .toLowerCase()
-          .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-          .replace(/[^a-z0-9 ]/g, '')
-          .trim();
+          .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // accents
+          .replace(/[^a-z0-9\- ]/g, ' ') // autorise les tirets
+          .split(/\s+/)
+          .filter(term => term.length >= 3 && !stopWords.includes(term));
       }
 
       function lancerRecherche() {
-        const inputValue = input.value;
-        const terms = normalize(inputValue).split(/\s+/).filter(Boolean);
+        const terms = normalizeAndFilterTerms(input.value);
         if (terms.length === 0) {
-          resultsDiv.innerHTML = '';
+          resultsDiv.innerHTML = '<p>Merci de saisir au moins un mot-clé significatif.</p>';
           return;
         }
 
         let matchingIDs = null;
 
-        terms.forEach((term) => {
-          let motsMatchés = [];
+        for (let i = 0; i < terms.length; i++) {
+          const term = terms[i];
+          const motsMatchés = Object.keys(index).filter(key => key.startsWith(term));
 
-          motsMatchés = Object.keys(index).filter(key => key.startsWith(term));
+          if (motsMatchés.length === 0) {
+            // Ce terme ne correspond à rien → on l’ignore et passe au suivant
+            continue;
+          }
 
           const idsTrouvés = motsMatchés
             .flatMap(key => index[key])
             .filter((v, i, a) => a.indexOf(v) === i); // supprime doublons
 
-          if (idsTrouvés.length > 0) {
-            matchingIDs = matchingIDs ?
-              matchingIDs.filter(id => idsTrouvés.includes(id)) :
-              idsTrouvés.slice();
+          if (!matchingIDs) {
+            matchingIDs = idsTrouvés;
+          } else {
+            // On filtre les résultats précédents pour ne garder que ceux qui matchent aussi ce terme
+            matchingIDs = matchingIDs.filter(id => idsTrouvés.includes(id));
           }
-        });
+
+          // Si à un moment donné il ne reste aucun ID, on peut arrêter
+          if (matchingIDs.length === 0) break;
+        }
 
         if (!matchingIDs || matchingIDs.length === 0) {
           resultsDiv.innerHTML = '<p>Aucun résultat trouvé.</p>';
@@ -118,14 +136,16 @@ function ocade_render_search_form() { ?>
             const html = posts.map(post => {
               const img = post._embedded?.['wp:featuredmedia']?.[0]?.source_url || '';
               return `
-                <div>
-                  <a href="${post.link}">${img ? `<img src="${img}">` : ''} ${post.title.rendered}</a>
-                </div>
-              `;
+          <div>
+            <a href="${post.link}">${img ? `<img src="${img}">` : ''} ${post.title.rendered}</a>
+          </div>
+        `;
             }).join('');
             resultsDiv.innerHTML = html;
-          }).finally(() => loader.style.display = 'none');
+          })
+          .finally(() => loader.style.display = 'none');
       }
+
 
       input.addEventListener('input', function() {
         clearTimeout(timeout);
