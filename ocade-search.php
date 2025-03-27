@@ -7,7 +7,7 @@
  * Author Name: Valentin Charrier
  * Description: Plugins de recherche d'articles ultra rapide pour le site Ocade Fusion.
  * Text Domain: ocade-search
- * Version: 1.0.9
+ * Version: 1.0.10
  */
 
 require_once plugin_dir_path(__FILE__) . 'inc/plugin-updater.php'; // Mettre à jour le plugin depuis un dépôt Git
