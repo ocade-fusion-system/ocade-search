@@ -2,6 +2,7 @@
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
@@ -91,10 +92,10 @@
 }
 
 #ocade-search-dialog .wrapper-loader #ocade-loader {
-  position: absolute; 
-  top: 50%; 
-  right: .7rem; 
-  display: none; 
+  position: absolute;
+  top: 50%;
+  right: .7rem;
+  display: none;
   transform: translateY(-50%);
 }
 
@@ -116,16 +117,30 @@
 }
 
 #ocade-search-dialog #ocade-search-results a {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding: 2px;
+  min-height: 4rem;
+  padding: 0.25rem 0.25rem 0.25rem calc(56px + 1.5rem);
   background-color: var(--wp--preset--color--nuit);
   color: white;
   border-radius: .5rem;
 }
 
+#ocade-search-dialog #ocade-search-results a:hover,
+#ocade-search-dialog #ocade-search-results a:focus,
+#ocade-search-dialog #ocade-search-results a:focus-within,
+#ocade-search-dialog #ocade-search-results a:focus-visible {
+  outline: 2px dotted var(--wp--preset--color--violet);
+  box-shadow: rgba(0, 0, 0, 0.15) 2.4px 2.4px 3.2px;
+  text-decoration-color: white;
+}
+
 #ocade-search-dialog #ocade-search-results img {
+  position: absolute;
+  top: 0.25rem;
+  left: 0.25rem;
   width: auto;
   height: 3.5rem;
   border-top-left-radius: .4rem;
@@ -151,5 +166,3 @@
   font-size: 1rem;
   text-transform: capitalize;
 }
-
-

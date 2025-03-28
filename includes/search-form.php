@@ -179,7 +179,7 @@ function ocade_render_search_form() { ?>
           } else {
             lancerRecherche();
           }
-        }, 50);
+        }, 150);
       });
 
       if (input.value.trim().length > 0) {
