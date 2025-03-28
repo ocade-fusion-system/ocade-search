@@ -95,8 +95,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 2rem 0 .5rem;
+  margin: .5rem 0;
   padding: 0 .5rem;
+	
+	@media(min-width: 600px) { margin: 2rem 0 .5rem; }
 }
 
 #ocade-search-dialog .wrapper-loader {
