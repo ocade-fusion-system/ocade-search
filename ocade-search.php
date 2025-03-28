@@ -34,6 +34,18 @@ register_deactivation_hook(__FILE__, function () {
   wp_clear_scheduled_hook('ocade_recherche_indexation');
 });
 
+/** Regenerer l'index du moteur de recherche si beosin via une tâche cron */
+add_action('plugins_loaded', function () {
+  $index_file = plugin_dir_path(__FILE__) . 'index/search-index.json';
+  // Si le fichier est manquant ET la tâche n'est pas déjà programmée
+  if (!file_exists($index_file) && !wp_next_scheduled('ocade_reindex_once')) wp_schedule_single_event(time() + 60, 'ocade_reindex_once');
+});
+/** Regenerer l'index du moteur de recherche si beosin via une tâche cron */
+add_action('ocade_reindex_once', function () {
+  require_once plugin_dir_path(__FILE__) . 'includes/indexer.php';
+  ocade_indexer();
+});
+
 /** Ajouter un champ personnalisé pour les ngrammes dans les articles. */
 function ocade_indexer_articles() {
   require_once plugin_dir_path(__FILE__) . 'includes/indexer.php';
