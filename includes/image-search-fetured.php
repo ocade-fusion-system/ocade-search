@@ -109,10 +109,16 @@ add_action('rest_api_init', function () {
       $image_id = get_post_meta($id, '_ocade_search_thumbnail_id', true);
       return $image_id ? wp_get_attachment_image_url($image_id, 'thumbnail') : null;
     },
+    'update_callback' => function ($value, $post_obj) {
+      // Accepte un ID numérique d'image (attachment)
+      $image_id = intval($value);
+      if (get_post_type($image_id) === 'attachment') {
+        update_post_meta($post_obj->ID, '_ocade_search_thumbnail_id', $image_id);
+      }
+    },
     'schema' => [
-      'description' => 'Image pour le moteur de recherche',
-      'type' => 'string',
-      'format' => 'uri',
+      'description' => 'Image pour le moteur de recherche (ID de média)',
+      'type' => 'integer',
       'context' => ['view', 'edit'],
     ],
   ]);
