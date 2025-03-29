@@ -45,6 +45,11 @@ add_action('ocade_reindex_once', function () {
   require_once plugin_dir_path(__FILE__) . 'includes/indexer.php';
   ocade_indexer();
 });
+/** Regenrer l'index du moteur de recherche si besoin lors de la publication d'un article */
+add_action('publish_post', function ($post_id) {
+  if (!wp_next_scheduled('ocade_reindex_once')) wp_schedule_single_event(time() + 60, 'ocade_reindex_once');
+});
+
 
 /** Ajouter un champ personnalisé pour les ngrammes dans les articles. */
 function ocade_indexer_articles() {
