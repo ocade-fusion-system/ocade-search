@@ -10,7 +10,7 @@
  * Version: 1.0.29
  */
 
- if ($pagenow === 'update-core.php') require_once plugin_dir_path(__FILE__) . 'inc/plugin-updater.php'; // Mettre à jour le plugin depuis un dépôt Git
+ if (is_admin()) require_once plugin_dir_path(__FILE__) . 'inc/plugin-updater.php'; // Mettre à jour le plugin depuis un dépôt Git
 require_once plugin_dir_path(__FILE__) . 'includes/admin-meta-box.php'; // Ajouter un champ personnalisé pour les ngrammes dans les articles
 require_once plugin_dir_path(__FILE__) . 'includes/api-rest.php'; // Permettre l'accès aux ngrammes via l'API REST
 require_once plugin_dir_path(__FILE__) . 'includes/ajax-indexation.php'; // Permettre de regénérer l'index de recherche
