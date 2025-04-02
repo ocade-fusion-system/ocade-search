@@ -37,7 +37,9 @@ add_filter('site_transient_update_plugins', function ($transient) {
     // Récupération des assets de la dernière release via l'API GitHub
     $response = wp_remote_get($github_api_url, [
       'headers' => [
-        'User-Agent' => 'WordPress' // GitHub requiert un User-Agent personnalisé
+        'User-Agent'    => 'WordPress',
+        'Authorization' => 'token ' . GITHUB_API_TOKEN,
+        'Accept'        => 'application/vnd.github+json'
       ]
     ]);
 
