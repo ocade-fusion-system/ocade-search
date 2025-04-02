@@ -18,40 +18,67 @@
   max-height: 100vh;
   padding: 0;
   border: none;
+}
 
-  @media(min-width: 400px) {
+@media(min-width: 400px) {
+  #ocade-search-dialog {
+
     --width: calc(400px - 0.5rem);
   }
+}
 
-  @media(min-width: 450px) {
+@media(min-width: 450px) {
+  #ocade-search-dialog {
+
     --width: calc(450px - 0.5rem);
   }
+}
 
-  @media(min-width: 500px) {
+@media(min-width: 500px) {
+  #ocade-search-dialog {
+
     --width: calc(500px - 0.5rem);
   }
+}
 
-  @media(min-width: 550px) {
+@media(min-width: 550px) {
+  #ocade-search-dialog {
+
     --width: calc(550px - 0.5rem);
   }
+}
 
-  @media(min-width: 600px) {
+@media(min-width: 600px) {
+  #ocade-search-dialog {
+
     --width: calc(600px - 0.5rem);
   }
+}
 
-  @media(min-width: 700px) {
+@media(min-width: 700px) {
+  #ocade-search-dialog {
+
     --width: calc(700px - 0.5rem);
   }
+}
 
-  @media(min-width: 800px) {
+@media(min-width: 800px) {
+  #ocade-search-dialog {
+
     --width: calc(800px - 0.5rem);
   }
+}
 
-  @media(min-width: 900px) {
+@media(min-width: 900px) {
+  #ocade-search-dialog {
+
     --width: calc(900px - 0.5rem);
   }
+}
 
-  @media(min-width: 1000px) {
+@media(min-width: 1000px) {
+  #ocade-search-dialog {
+
     --width: calc(1000px - 0.5rem);
   }
 }
@@ -81,12 +108,18 @@
   padding-right: 4rem;
   background-color: var(--wp--preset--color--violet-clair);
   font-size: 1rem;
+}
 
-  @media (min-width: 768px) {
+@media (min-width: 768px) {
+  #ocade-search-dialog #dialog-title {
+
     font-size: 1.2rem;
   }
+}
 
-  @media (min-width: 1280px) {
+@media (min-width: 1280px) {
+  #ocade-search-dialog #dialog-title {
+
     font-size: 1.3rem;
   }
 }
@@ -97,8 +130,13 @@
   align-items: center;
   margin: .5rem 0;
   padding: 0 .5rem;
-	
-	@media(min-width: 600px) { margin: 2rem 0 .5rem; }
+}
+
+@media(min-width: 600px) {
+  #ocade-search-dialog form {
+
+    margin: 2rem 0 .5rem;
+  }
 }
 
 #ocade-search-dialog .wrapper-loader {
