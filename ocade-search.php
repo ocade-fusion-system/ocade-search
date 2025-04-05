@@ -7,12 +7,10 @@
  * Author Name: Valentin Charrier
  * Description: Plugins de recherche d'articles ultra rapide pour le site Ocade Fusion.
  * Text Domain: ocade-search
- * Version: 1.0.38
+ * Version: 1.0.37
  */
 
-add_action('admin_init', function () {
-  if (isset($_SERVER['REQUEST_URI']) && strpos($_SERVER['REQUEST_URI'], 'update-core.php') !== false) require_once plugin_dir_path(__FILE__) . 'inc/plugin-updater.php';
-});
+if (is_admin()) require_once plugin_dir_path(__FILE__) . 'inc/plugin-updater.php'; // Mettre à jour le plugin depuis un dépôt Git
 
 require_once plugin_dir_path(__FILE__) . 'includes/admin-meta-box.php'; // Ajouter un champ personnalisé pour les ngrammes dans les articles
 require_once plugin_dir_path(__FILE__) . 'includes/api-rest.php'; // Permettre l'accès aux ngrammes via l'API REST
