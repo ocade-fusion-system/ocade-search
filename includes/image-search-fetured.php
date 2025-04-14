@@ -24,9 +24,7 @@ function ocade_render_search_thumbnail_meta_box($post) {
 
   // Aperçu de l’image actuelle
   echo '<div id="ocade_search_thumbnail_preview" style="margin-bottom:10px;">';
-  if ($image_url) {
-    echo '<img src="' . esc_url($image_url) . '" style="width:64px;height:64px;border-radius:4px;">';
-  }
+  if ($image_url) echo '<img src="' . esc_url($image_url) . '" alt="" title="Aperçu de l’image sélectionnée" style="width:64px;height:64px;border-radius:4px;">';
   echo '</div>';
 
   // Bouton d'ajout/suppression
@@ -77,7 +75,7 @@ function ocade_render_search_thumbnail_meta_box($post) {
         frame.on('select', function() {
           const attachment = frame.state().get('selection').first().toJSON();
           input.value = attachment.id;
-          preview.innerHTML = '<img src="' + attachment.sizes.thumbnail.url + '" style="width:64px;height:64px;border-radius:4px;">';
+          preview.innerHTML = '<img src="' + attachment.sizes.thumbnail.url + '" alt="" title="' + attachment.title + '" style="width:64px;height:64px;border-radius:4px;">';
         });
 
         frame.open();

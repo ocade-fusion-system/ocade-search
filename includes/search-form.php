@@ -3,7 +3,7 @@
 function ocade_render_search_form() { ?>
   <dialog id="ocade-search-dialog" aria-labelledby="dialog-title">
     <div>
-      <button id="ocade-search-close" aria-label="Fermer la recherche" title="Fermer la recherche d'article" onclick="document.getElementById('ocade-search-dialog').close();document.body.classList.remove('modal-open');">×</button>
+      <button id="ocade-search-close" aria-label="Fermer la recherche" title="Fermer la recherche d'article" onclick="document.getElementById('ocade-search-dialog').close();document.body.classList.remove('no-scroll', 'modal-open');">×</button>
 
       <p id="dialog-title">RECHERCHER UN ARTICLE</p>
 
