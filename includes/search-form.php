@@ -136,7 +136,13 @@ function ocade_render_search_form() { ?>
             infoMessage.textContent = '';
             resultsDiv.innerHTML = posts.map(post => {
               const img = post.ocade_search_image || '';
-              return `<div class="resultat-recherche"><a href="${post.link}">${img ? `<img src="${img}">` : ''} ${post.title.rendered}</a></div>`;
+              const titre = post.title.rendered.replace(/(<([^>]+)>)/gi, "");
+              return `<div class="resultat-recherche">
+                        <a href="${post.link}">
+                          ${img ? `<img src="${img}" alt="${titre}" title="${titre}">` : ''}
+                          ${post.title.rendered}
+                        </a>
+                      </div>`;
             }).join('');
           })
           .finally(() => loader.style.display = 'none');
@@ -150,7 +156,13 @@ function ocade_render_search_form() { ?>
             infoMessage.textContent = 'Les derniers articles :';
             resultsDiv.innerHTML = posts.map(post => {
               const img = post.ocade_search_image || '';
-              return `<div class="resultat-recherche"><a href="${post.link}">${img ? `<img src="${img}">` : ''} ${post.title.rendered}</a></div>`;
+              const titre = post.title.rendered.replace(/(<([^>]+)>)/gi, "");
+              return `<div class="resultat-recherche">
+                        <a href="${post.link}">
+                          ${img ? `<img src="${img}" alt="${titre}" title="${titre}">` : ''}
+                          ${post.title.rendered}
+                        </a>
+                      </div>`;
             }).join('');
           })
           .finally(() => loader.style.display = 'none');
@@ -174,7 +186,6 @@ function ocade_render_search_form() { ?>
         }, 150);
       });
 
-      // Chargement initial : derniers articles + index de recherche
       chargerDerniersArticles();
 
       fetch('<?php echo plugins_url('../index/search-index.json', __FILE__); ?>')
