@@ -101,6 +101,19 @@ function ocade_render_search_form() { ?>
         lancerRecherche();
       }
 
+      function genererResultatsHTML(posts) {
+        return posts.map(post => {
+          const img = post.ocade_search_image || '';
+          const titre = post.title.rendered.replace(/(<([^>]+)>)/gi, "");
+          return `<div class="resultat-recherche">
+                    <a href="${post.link}" title="${titre}">
+                      ${img ? `<img src="${img}" alt="${titre}">` : ''}
+                      ${post.title.rendered}
+                    </a>
+                  </div>`;
+        }).join('');
+      }
+
       function lancerRecherche() {
         const termsTexte = normalizeAndFilterTerms(input.value);
         const allTerms = [...termsTexte, ...filtresActifs];
@@ -134,16 +147,7 @@ function ocade_render_search_form() { ?>
           .then(res => res.json())
           .then(posts => {
             infoMessage.textContent = '';
-            resultsDiv.innerHTML = posts.map(post => {
-              const img = post.ocade_search_image || '';
-              const titre = post.title.rendered.replace(/(<([^>]+)>)/gi, "");
-              return `<div class="resultat-recherche">
-                        <a href="${post.link}">
-                          ${img ? `<img src="${img}" alt="${titre}" title="${titre}">` : ''}
-                          ${post.title.rendered}
-                        </a>
-                      </div>`;
-            }).join('');
+            resultsDiv.innerHTML = genererResultatsHTML(posts);
           })
           .finally(() => loader.style.display = 'none');
       }
@@ -154,16 +158,7 @@ function ocade_render_search_form() { ?>
           .then(res => res.json())
           .then(posts => {
             infoMessage.textContent = 'Les derniers articles :';
-            resultsDiv.innerHTML = posts.map(post => {
-              const img = post.ocade_search_image || '';
-              const titre = post.title.rendered.replace(/(<([^>]+)>)/gi, "");
-              return `<div class="resultat-recherche">
-                        <a href="${post.link}">
-                          ${img ? `<img src="${img}" alt="${titre}" title="${titre}">` : ''}
-                          ${post.title.rendered}
-                        </a>
-                      </div>`;
-            }).join('');
+            resultsDiv.innerHTML = genererResultatsHTML(posts);
           })
           .finally(() => loader.style.display = 'none');
       }
@@ -195,7 +190,6 @@ function ocade_render_search_form() { ?>
           indexLoaded = true;
           afficherTousLesFiltres(index);
         });
-
     });
   </script>
 <?php }
