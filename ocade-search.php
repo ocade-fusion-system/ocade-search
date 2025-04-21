@@ -21,8 +21,13 @@ require_once plugin_dir_path(__FILE__) . 'includes/image-search-fetured.php'; //
 
 // Charger le fichier style.css du plugin
 add_action('wp_enqueue_scripts', function () {
-  wp_enqueue_style('ocade-search', plugin_dir_url(__FILE__) . 'style.css');
+  $style_path = plugin_dir_path(__FILE__) . 'style.css';
+  $style_url  = plugin_dir_url(__FILE__) . 'style.css';
+  // Utilise la date de modification comme version
+  $version = file_exists($style_path) ? filemtime($style_path) : null;
+  wp_enqueue_style('ocade-search', $style_url, [], $version);
 });
+
 
 
 /** Créer une tâche CRON quotidienne à 4H de réindexation */
