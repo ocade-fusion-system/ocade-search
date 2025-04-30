@@ -157,8 +157,17 @@ function ocade_render_search_form() { ?>
         fetch('<?php echo esc_url(rest_url('wp/v2/posts?_embed=true&per_page=5')); ?>')
           .then(res => res.json())
           .then(posts => {
-            infoMessage.textContent = 'Les derniers articles :';
-            resultsDiv.innerHTML = genererResultatsHTML(posts);
+            if (Array.isArray(posts)) {
+              infoMessage.textContent = 'Les derniers articles :';
+              resultsDiv.innerHTML = genererResultatsHTML(posts);
+            } else {
+              infoMessage.textContent = 'Erreur lors de la récupération des articles.';
+              console.warn('La réponse reçue n’est pas un tableau :', posts);
+            }
+          })
+          .catch(error => {
+            infoMessage.textContent = 'Impossible de charger les articles.';
+            console.error('Erreur réseau :', error);
           })
           .finally(() => loader.style.display = 'none');
       }
